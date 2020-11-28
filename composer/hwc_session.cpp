@@ -1114,16 +1114,6 @@ int32_t HWCSession::SetPowerMode(hwc2_display_t display, int32_t int_mode) {
   // async_powermode supported for power on and off
   bool override_mode = async_powermode_ && display_ready_.test(UINT32(display)) &&
                        async_power_mode_triggered_;
-  HWC2::PowerMode last_power_mode = hwc_display_[display]->GetCurrentPowerMode();
-
-  if (last_power_mode == mode) {
-    return HWC2_ERROR_NONE;
-  }
-
-  if (!((last_power_mode == HWC2::PowerMode::Off && mode == HWC2::PowerMode::On) ||
-     (last_power_mode == HWC2::PowerMode::On && mode == HWC2::PowerMode::Off))) {
-    override_mode = false;
-  }
 
   if (!override_mode) {
     auto error = CallDisplayFunction(display, &HWCDisplay::SetPowerMode, mode,
